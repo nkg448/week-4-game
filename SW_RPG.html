@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery Calculator</title>
+
+  <!-- Added link to the jQuery Library -->
+  <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+
+  
+  <!-- Added a link to Bootstrap-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  
+
+</head>
+<body>
+
+  <div class="jumbotron">
+    <h2 class="text-center">Star Wars RPG!</h2>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <!-- Character Selection Panel -->
+      <div class="col-md-8">
+        <div class="panel panel-default" id="fighters">
+          <div class="panel-heading">
+            <h3 class="panel-title">Choose your fighter: </h3>
+          </div>
+            <!-- This will be filled by JavaScript!-->
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default" id="arena">
+          <div class="panel-heading">
+            <h3 class="panel-title">The Arena</h3>
+          </div>
+          <!--
+          <div class="panel panel-default col-md-6">
+              <div class="panel-heading text-center">Obi-Wan Kenobi</div>
+               <div class="panel-body">
+                  <img src="http://placehold.it/200x200" class="img-responsive">
+               </div>
+               <div class="panel-footer">HP: 200<br>Attack: 15HP</div>
+              </div>
+              <div class="panel panel-default col-md-6">
+                <div class="panel-heading text-center">Darth Maul</div>
+                <div class="panel-body">
+                  <img src="http://placehold.it/200x200" class="img-responsive">
+                </div>
+                <div class="panel-footer">HP: 200<br>Attack: 15HP</div>
+              </div>
+          -->
+        </div>
+        </div>
+    </div>
+    <div class="row">
+      <!-- Enemies Selection Panel -->
+      <div class="col-md-8">
+        <div class="panel panel-default" id="enemies">
+          <div class="panel-heading">
+            <h3 class="panel-title">Choose your opponent: </h3>
+          </div>
+              <!--<div class="panel panel-default col-md-3">
+                <div class="panel-heading text-center">Obi-Wan Kenobi</div>
+                <div class="panel-body">
+                  <img src="http://placehold.it/200x200" class="img-responsive">
+                </div>
+                <div class="panel-footer">HP: 200<br>Attack: 15HP</div>
+              </div>
+              <div class="panel panel-default col-md-3">
+                <div class="panel-heading text-center">Darth Maul</div>
+                <div class="panel-body">
+                  <img src="http://placehold.it/200x200" class="img-responsive">
+                </div>
+                <div class="panel-footer">HP: 200<br>Attack: 15HP</div>
+              </div>
+              <div class="panel panel-default col-md-3">
+                <div class="panel-heading text-center">Darth Sidious</div>
+                <div class="panel-body">
+                  <img src="http://placehold.it/200x200" class="img-responsive">
+                </div>
+                <div class="panel-footer">HP: 200<br>Attack: 15HP</div>
+              </div>
+              <div class="panel panel-default col-md-3">
+                <div class="panel-heading text-center">Luke Skywalker</div>
+                <div class="panel-body">
+                  <img src="http://placehold.it/200x200" class="img-responsive">
+                </div>
+                <div class="panel-footer">HP: 200<br>Attack: 15HP</div>
+              </div>
+            -->
+          </div>
+        </div>
+  
+    </div>
+  </div>
+
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+      
+      function initializeGame() {
+
+        var gameStarted=false;
+
+
+
+
+      }
+
+      function drawScreen(allChars) {
+        
+
+        for(i=0;i<allChars.length;i++)
+        {
+          if(allChars[i].isFighter){
+            if(allChars[i].isActive){
+              var activeFighter=i;
+              allChars[i].panel.attr("class","panel panel-default col-md-6");
+              }
+            else{
+              allChars[i].panel.attr("class","panel panel-default col-md-3");
+              $("#fighters").append(allChars[i].panel);
+            }
+          }
+          if(allChars[i].isEnemy){
+            if(allChars[i].isActive){
+              var activeEnemy=i;
+              allChars[i].panel.attr("class","panel panel-default col-md-6");
+            } 
+            else{  
+              allChars[i].panel.attr("class","panel panel-default col-md-3");
+              $("#enemies").append(allChars[i].panel);
+            }
+          }
+        }
+        if(activeFighter) $("#arena").append(allChars[activeFighter].panel);
+        if(activeEnemy) $("#arena").append(allChars[activeEnemy].panel);
+      }
+
+      function makePanel(someChar){
+        //declare elements of panel
+        var panel = $("<div>");
+        var panelHeading = $("<div>");
+        var panelBody = $("<div>");
+        var panelFooter= $("<div>");
+        var img = $("<img>");
+
+        //set classes, fill information/images
+        //header
+        panelHeading.addClass("panel-heading text-center");
+        panelHeading.html(someChar.name);
+        //body
+        panelBody.addClass("panel-body");
+        img.attr("src",someChar.image);
+        img.addClass("img-responsive");
+        panelBody.append(img);
+        //footer
+        panelFooter.addClass("panel-footer");
+        panelFooter.html("HP: " + someChar.currentHP + "<br>Damage: " + someChar.Damage);
+        
+        //put it all together
+        panel.append(panelHeading);
+        panel.append(panelBody);
+        panel.append(panelFooter);
+        panel.attr("id",someChar.id);
+        someChar.panel = panel;
+      }
+
+      var fighterChosen=false;
+      var enemyChosen=false;
+
+
+
+      var charDarthSid = {
+        name: "Darth Sidious",
+        id:"darthsid",
+        initialHP: 0,
+        currentHP: 0,
+        initialDamage : 10,
+        Damage: 0,
+        isFighter: false,
+        isEnemy: true,
+        isActive: true,
+        image: "http://placehold.it/200x200",
+        //panel: ""
+
+      };
+
+      var charDarthMaul = {
+        name: "Darth Maul",
+        id: "darthmaul",
+        initialHP: 0,
+        currentHP: 0,
+        initialDamage : 10,
+        Damage: 0,
+        isFighter: true,
+        isEnemy: false,
+        isActive: true,
+        isLocked: false,
+        image: "http://placehold.it/200x200",
+        //panel:""
+      };
+
+      var charLukeSky = {
+        name: "Luke Skywalker",
+        id: "lukesky",
+        initialHP: 0,
+        currentHP: 0,
+        initialDamage : 10,
+        Damage: 0,
+        isFighter: true,
+        isEnemy: false,
+        isActive: false,
+        image: "http://placehold.it/200x200",
+        //panel:""
+      };
+
+      var charObi = {
+        name: "Obi Wan Kenobi",
+        id: "obi",
+        initialHP: 0,
+        currentHP: 0,
+        initialDamage : 10,
+        Damage: 0,
+        isFighter: false,
+        isEnemy: true,
+        isActive: false,
+        image: "http://placehold.it/200x200",
+        //panel:""
+      }
+      /*
+      makePanel(charLukeSky);
+      charLukeSky.panel.addClass("panel panel-default fighter col-md-3");
+      $("#fighters").append(charLukeSky.panel);
+
+      makePanel(charDarthMaul);
+      charDarthMaul.panel.addClass("panel panel-default fighter col-md-3");
+      $("#fighters").append(charDarthMaul.panel);
+
+      makePanel(charDarthSid);
+      charDarthSid.panel.addClass("panel panel-default fighter col-md-3");
+      $("#fighters").append(charDarthSid.panel);
+
+      makePanel(charObi);
+      charObi.panel.addClass("panel panel-default fighter col-md-3");
+      $("#fighters").append(charObi.panel);
+      */
+      makePanel(charLukeSky);
+      makePanel(charDarthMaul);
+      makePanel(charDarthSid);
+      makePanel(charObi);
+
+      var allChars=[charObi,charLukeSky,charDarthSid,charDarthMaul];
+      drawScreen(allChars);
+
+      $(".fighter").on("click", function() {
+        alert(this.id);
+      
+
+
+
+      });
+
+      //var newChar = Character;
+      //newChar.name="Jabberjaw";
+      //console.log(Character);
+      
+      // Make our variables global to the runtime of our application
+      var firstNumber;
+      var secondNumber;
+      var operator;
+      var result;
+      var isOperatorChosen;
+      var isCalculated;
+
+      // Use a function to initialize our calculator.
+      // This way when the user hits clear, we can guarantee a reset of the app.
+      function initializeCalculator() {
+        firstNumber = "";
+        secondNumber = "";
+        operator = "";
+        isOperatorChosen = false;
+        isCalculated = false;
+
+        $("#firstNumber, #secondNumber, #operator, #result").empty();
+      }
+
+      // Add an on click listener to all elements that have the class "number"
+      $(".number").on("click", function() {
+
+        // Check if we've already run a calculation, if so... we'll just.
+        if (isCalculated) return;
+
+        // If operator is chosen, we should be writing the secondNumber, otherwise, the firstNumber
+        if (isOperatorChosen) {
+          secondNumber += this.value;
+          $("#secondNumber").html(secondNumber);
+
+        }
+        else {
+          firstNumber += this.value;
+          $("#firstNumber").html(firstNumber);
+        }
+      });
+
+      // Add an on click listener to all elements that have the class "operator"
+      $(".operator").on("click", function() {
+
+        // Check if we've already run a calculation, if so... we'll just exit.
+        if (isCalculated) return;
+
+        // Set isOperatorChosen to true so we start writing to secondNumber
+        isOperatorChosen = true;
+
+        // Store off the operator
+        operator = this.value;
+
+        // Set the HTML of the #operator to the text of what was clicked
+        $("#operator").html($(this).text());
+
+      });
+
+
+      // Add an on click listener to all elements that have the class "equal"
+      $(".equal").on("click", function() {
+
+        // If we already clicked equal, don't do the calculation again
+        if (isCalculated) return;
+
+        // Set isCalculated to true so that we don't get in a weird UI state by clicking buttons again
+        isCalculated = true;
+
+        // Use parseInt to convert our string representation of numbers into actual integers
+        firstNumber = parseInt(firstNumber);
+        secondNumber = parseInt(secondNumber);
+
+        // Based on the operator that was chosen.
+        // Then run the operation and set the HTML of the result of that operation
+        if (operator === "plus") {
+          result = firstNumber + secondNumber;
+        }
+
+        if (operator === "minus") {
+          result = firstNumber - secondNumber;
+        }
+
+        if (operator === "times") {
+          result = firstNumber * secondNumber;
+        }
+
+        if (operator === "divide") {
+          result = firstNumber / secondNumber;
+        }
+
+        if (operator === "power") {
+          result = Math.pow(firstNumber, secondNumber);
+        }
+
+        $("#result").html(result);
+      });
+
+      // Add an on click listener to all elements that have the class "clear"
+      $(".clear").on("click", function() {
+
+        // Call initializeCalculater so we can reset the state of our app
+        initializeCalculator();
+
+      });
+
+      // Call initializeCalculater so we can set the state of our app
+      initializeCalculator();
+    });
+
+</script>
+
+</body>
+</html>
