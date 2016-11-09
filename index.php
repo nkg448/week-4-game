@@ -1,1 +1,1 @@
-<?php include_once("SW_RPG"); ?>
+<?php include_once("SW_RPG.html"); ?>
