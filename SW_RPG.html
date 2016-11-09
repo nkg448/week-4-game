@@ -7,7 +7,7 @@
   <!-- Added link to the jQuery Library -->
   <!--<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>-->
   <script src="https://code.jquery.com/jquery.js"></script>
-  
+   
   <!-- Added a link to Bootstrap-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   
@@ -27,14 +27,26 @@
       
       <!-- Character Selection Panel -->
       <div class="col-md-8">
+      <div class="row">
+      <div class="col-md-12">
         <div class="panel panel-info">
           <div class="panel-heading"><h3 class="panel-title">Choose your fighter: </h3></div>
           <div class="panel-body" id="fighters">
             <!-- This will be filled by JavaScript!-->
           </div>
         </div>
+      </div></div>
+      <div class="row">
+        <div class="col-md-12">
+        <div class="panel panel-info">
+          <div class="panel-heading"><h3 class="panel-title">Choose your opponent: </h3></div>
+          <div class="panel-body" id="enemies">
+            <!-- This will be filled by JavaScript!-->
+          </div>
+          </div>
+        </div>
       </div>
-      
+      </div>
       <!--This is the arena -->
       <div class="col-md-4">
         <div class="panel panel-primary">
@@ -45,19 +57,7 @@
         </div>
         </div>
     </div>
-    
-    <!-- This is the Enemy Selection-->
-    <div class="row">
-       <div class="col-md-8">
-        <div class="panel panel-info">
-          <div class="panel-heading"><h3 class="panel-title">Choose your opponent: </h3></div>
-          <div class="panel-body" id="enemies">
-            <!-- This will be filled by JavaScript!-->
-          </div>
-          </div>
-        </div>
-  
-    </div>
+
   </div>
 
   <script type="text/javascript">
@@ -94,7 +94,24 @@
         }
         if(activeFighter) $("#arena").append(allChars[activeFighter].panel);
         if(activeEnemy) $("#arena").append(allChars[activeEnemy].panel);
+
+        if(activeFighter && activeEnemy)
+        {
+          $("#arena").append(gamePanel());
+        }
+
       };
+
+      function gamePanel(){
+        var buttonDiv = $("<div>");
+        buttonDiv.addClass("col-md-12");
+        var button = $("<button type=\"button\" class=\"btn btn-warning btn-block\">Attack!</button>");
+        buttonDiv.append(button);
+        return buttonDiv;
+
+
+
+      }
 
       function makePanel(someChar){
         //declare elements of panel
@@ -127,14 +144,14 @@
 
       var fighterChosen=false;
       var enemyChosen=false;
-      
+
       var charDarthSid = {
         name: "Darth Sidious",
         id:"darthsid",
-        initialHP: 0,
-        currentHP: 0,
+        initialHP: 100,
+        currentHP: 100,
         initialDamage : 10,
-        Damage: 0,
+        Damage: 10,
         isFighter: true,
         isEnemy: false,
         isActive: false,
@@ -148,9 +165,9 @@
         name: "Darth Maul",
         id: "darthmaul",
         initialHP: 0,
-        currentHP: 0,
+        currentHP: 100,
         initialDamage : 10,
-        Damage: 0,
+        Damage: 10,
         isFighter: true,
         isEnemy: false,
         isActive: false,
@@ -203,6 +220,7 @@
         for(i=0;i<allChars.length;i++){
           if(allChars[i].id===this.id){
             allChars[i].isActive=true;
+            fighterChosen=true;
           } 
           else{
             allChars[i].isFighter=false;
@@ -219,6 +237,8 @@
         for(i=0;i<allChars.length;i++){
           if(allChars[i].id===this.id && !allChars[i].isLocked ){
             allChars[i].isActive=true;
+            enemyChosen=true;
+
           } 
           else{
             allChars[i].isLocked=true;
