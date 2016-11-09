@@ -70,6 +70,7 @@
        // $("#enemies").empty();
         for(i=0;i<allChars.length;i++)
         {
+          
           if(allChars[i].isFighter){
             if(allChars[i].isActive){
               var activeFighter=i;
@@ -86,32 +87,67 @@
               var activeEnemy=i;
               allChars[i].panel.attr("class","panel panel-danger active col-md-6");
             } 
-            else{  
+            else if(!allChars[i].isDead){  
               allChars[i].panel.attr("class","panel panel-danger enemy col-md-3");
               $("#enemies").append(allChars[i].panel);
             }
           }
         }
+        $("#arena").empty();
         if(activeFighter) $("#arena").append(allChars[activeFighter].panel);
         if(activeEnemy) $("#arena").append(allChars[activeEnemy].panel);
-
         if(activeFighter && activeEnemy)
         {
-          $("#arena").append(gamePanel());
+            if(allChars[activeFighter].isDead)
+              $("#arena").append(gamePanel(2));
+            else
+              if(allChars[activeEnemy].isDead)
+                $("#arena").append(gamePanel(3));
+              else
+                $("#arena").append(gamePanel(1));
+            
         }
+        
+
 
       };
 
-      function gamePanel(){
+      function gamePanel(options){
         var buttonDiv = $("<div>");
         buttonDiv.addClass("col-md-12");
-        var button = $("<button type=\"button\" class=\"btn btn-warning btn-block\">Attack!</button>");
-        buttonDiv.append(button);
+        
+        if(options==1)
+        {
+          var someText = $("<p>The battle's begun! Have at your foe!</p>");
+          var button1 = $("<button type=\"button\" class=\"btn btn-warning btn-block attack\">Attack!</button>");
+        }
+        
+        if(options==2)
+        {
+          var someText = $("<p>You've lost : ( Try again!</p>");
+          var button1 = $("<button type=\"button\" class=\"btn btn-danger btn-block reset\">Reset!</button>");
+        }
+
+        if(options==3)
+        {
+          var someText = $("<p>You've won! Onto the next ruffian!</p>");
+          var button1 = $("<button type=\"button\" class=\"btn btn-danger btn-block next\">Pick Next Enemy</button>");
+        }
+        buttonDiv.append(someText,button1);
         return buttonDiv;
-
-
-
       }
+
+      function gamePlay(fighter, enemy){
+        fighter.currentHP-=enemy.Damage;
+        enemy.currentHP-=fighter.Damage;
+        if(fighter.currentHP <= 0)   
+          fighter.isDead=true;
+        if(enemy.currentHP <= 0)
+          enemy.isDead=true;     
+        //console.log(fighter.currentHP);
+        //console.log(enemy.currentHP);
+      }
+
 
       function makePanel(someChar){
         //declare elements of panel
@@ -156,6 +192,7 @@
         isEnemy: false,
         isActive: false,
         isLocked: false,
+        isDead: false,
         image: "http://placehold.it/200x200"
         //panel: ""
 
@@ -165,13 +202,14 @@
         name: "Darth Maul",
         id: "darthmaul",
         initialHP: 0,
-        currentHP: 100,
+        currentHP: 110,
         initialDamage : 10,
         Damage: 10,
         isFighter: true,
         isEnemy: false,
         isActive: false,
         isLocked: false,
+        isDead: false,
         image: "http://placehold.it/200x200"
         //panel:""
       };
@@ -187,6 +225,7 @@
         isEnemy: false,
         isActive: false,
         isLocked: false,
+        isDead: false,
         image: "http://placehold.it/200x200"
         //panel:""
       };
@@ -202,6 +241,7 @@
         isEnemy: false,
         isActive: false,
         isLocked: false,
+        isDead: false,
         image: "http://placehold.it/200x200"
         //panel:""
       };
@@ -220,7 +260,7 @@
         for(i=0;i<allChars.length;i++){
           if(allChars[i].id===this.id){
             allChars[i].isActive=true;
-            fighterChosen=true;
+            fighterChosen=i;
           } 
           else{
             allChars[i].isFighter=false;
@@ -235,9 +275,9 @@
 
       $(document).on("click", ".enemy", function() {
         for(i=0;i<allChars.length;i++){
-          if(allChars[i].id===this.id && !allChars[i].isLocked ){
+          if(allChars[i].id===this.id && !allChars[i].isLocked  ){
             allChars[i].isActive=true;
-            enemyChosen=true;
+            enemyChosen=i;
 
           } 
           else{
@@ -249,6 +289,31 @@
         console.log(this);
 
       });
+
+      $(document).on("click", ".attack", function() {
+        if(!(allChars[fighterChosen].isDead && allChars[enemyChosen].isDead)){
+        console.log(allChars[fighterChosen].HP);
+        console.log(allChars[enemyChosen].HP);
+        gamePlay(allChars[fighterChosen],allChars[enemyChosen]);
+        makePanel(allChars[fighterChosen]);
+        makePanel(allChars[enemyChosen]);
+        drawScreen(allChars);
+        }
+        else{
+          if(allChars[fighterChosen].isDead)
+          {
+            for(i=0;i<allChars.length;i++){
+              if(i!=fighterChosen||i!=enemyChosen)
+                allChars.isLocked=false;
+            }
+          }
+        }
+        //console.log(this);
+
+      });
+
+
+
   
     });
 
