@@ -118,19 +118,19 @@
         
         if(options==1)
         {
-          var someText = $("<p>The battle's begun! Have at your foe!</p>");
+          var someText = $("<p class=\"text-center\">The battle's begun! Have at your foe!</p>");
           var button1 = $("<button type=\"button\" class=\"btn btn-warning btn-block attack\">Attack!</button>");
         }
         
         if(options==2)
         {
-          var someText = $("<p>You've lost : ( Try again!</p>");
+          var someText = $("<p class=\"text-center\">You've lost : ( Try again!</p>");
           var button1 = $("<button type=\"button\" class=\"btn btn-danger btn-block reset\">Reset!</button>");
         }
 
         if(options==3)
         {
-          var someText = $("<p>You've won! Onto the next ruffian!</p>");
+          var someText = $("<p class=\"text-center\">You've won! Onto the next ruffian!</p>");
           var button1 = $("<button type=\"button\" class=\"btn btn-danger btn-block next\">Pick Next Enemy</button>");
         }
         buttonDiv.append(someText,button1);
@@ -193,7 +193,7 @@
         isActive: false,
         isLocked: false,
         isDead: false,
-        image: "http://placehold.it/200x200"
+        image: "assets/images/sid.jpg"
         //panel: ""
 
       };
@@ -201,7 +201,7 @@
       var charDarthMaul = {
         name: "Darth Maul",
         id: "darthmaul",
-        initialHP: 0,
+        initialHP: 110,
         currentHP: 110,
         initialDamage : 10,
         Damage: 10,
@@ -210,15 +210,15 @@
         isActive: false,
         isLocked: false,
         isDead: false,
-        image: "http://placehold.it/200x200"
+        image: "assets/images/maul.jpg"
         //panel:""
       };
 
       var charLukeSky = {
         name: "Luke Skywalker",
         id: "lukesky",
-        initialHP: 0,
-        currentHP: 0,
+        initialHP: 110,
+        currentHP: 110,
         initialDamage : 10,
         Damage: 0,
         isFighter: true,
@@ -226,15 +226,15 @@
         isActive: false,
         isLocked: false,
         isDead: false,
-        image: "http://placehold.it/200x200"
+        image: "assets/images/luke.jpg"
         //panel:""
       };
 
       var charObi = {
         name: "Obi Wan Kenobi",
         id: "obi",
-        initialHP: 0,
-        currentHP: 0,
+        initialHP: 110,
+        currentHP: 110,
         initialDamage : 10,
         Damage: 0,
         isFighter: true,
@@ -242,7 +242,7 @@
         isActive: false,
         isLocked: false,
         isDead: false,
-        image: "http://placehold.it/200x200"
+        image: "assets/images/ben.jpg"
         //panel:""
       };
 
@@ -299,7 +299,7 @@
         makePanel(allChars[enemyChosen]);
         drawScreen(allChars);
         }
-        else{
+        /*else{
           if(allChars[fighterChosen].isDead)
           {
             for(i=0;i<allChars.length;i++){
@@ -307,13 +307,46 @@
                 allChars.isLocked=false;
             }
           }
-        }
+        }*/
         //console.log(this);
 
       });
 
+      $(document).on("click", ".reset", function() {
+        for(i=0;i<allChars.length;i++){
+          allChars[i].isFighter=true;
+          allChars[i].isEnemy= false;
+          allChars[i].isActive= false;
+          allChars[i].isLocked= false;
+          allChars[i].isDead= false;
+          allChars[i].currentHP=allChars[i].initialHP;
+          allChars[i].Damage=allChars[i].initialDamage;
+          if(i!=0)
+          makePanel(allChars[i]);
 
+          }
+          $("#arena").empty();
+          $("#fighters").empty();
+          $("#enemies").empty();
+        drawScreen(allChars); 
+        //console.log(this);
 
+      });
+
+      $(document).on("click", ".next", function() {
+        for(i=0;i<allChars.length;i++){
+          if(i!=fighterChosen||i!=enemyChosen)
+            allChars[i].isLocked=false;
+          if(i==enemyChosen)
+            allChars[i].isActive=false;
+          if(i==fighterChosen)
+            {
+              allChars[i].Damage+=20;
+              makePanel(allChars[i]);
+            }
+        }
+        drawScreen(allChars);
+      });
   
     });
 
