@@ -7,10 +7,9 @@
   <!-- Added link to the jQuery Library -->
   <!--<script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>-->
   <script src="https://code.jquery.com/jquery.js"></script>
-   
+  <script src="assets/javascript/game.js"></script> 
   <!-- Added a link to Bootstrap-->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  
+  <link rel="stylesheet" href="assets/css/reset.css">
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   
 
@@ -19,7 +18,7 @@
 
   <div class="jumbotron">
     <h1 class="text-center">Star Wars RP*G!</h1>
-    <h3 class="text-center">Now with 100% more BootStrap!</h3>
+    <h4 class="text-center">Now with 100% more BootStrap!</h4>
   </div>
 
   <div class="container">
@@ -65,12 +64,8 @@
     $(document).ready(function() {
       
       function drawScreen(allChars) {
-       // $("#fighters").empty();
-       // $("#arena").empty();
-       // $("#enemies").empty();
         for(i=0;i<allChars.length;i++)
         {
-          
           if(allChars[i].isFighter){
             if(allChars[i].isActive){
               var activeFighter=i;
@@ -130,9 +125,16 @@
 
         if(options==3)
         {
-          var someText = $("<p class=\"text-center\">You've won! Onto the next ruffian!</p>");
+          var someText = $("<p class=\"text-center\">You've won this round! Onto the next ruffian!</p>");
           var button1 = $("<button type=\"button\" class=\"btn btn-danger btn-block next\">Pick Next Enemy</button>");
         }
+
+        if(options==4)
+        {
+          var someText = $("<p class=\"text-center\">You've slayed all who came before you. Well done!</p>");
+          var button1 = $("<button type=\"button\" class=\"btn btn-danger btn-block reset\">Play Again</button>");
+        }
+
         buttonDiv.append(someText,button1);
         return buttonDiv;
       }
@@ -140,6 +142,7 @@
       function gamePlay(fighter, enemy){
         fighter.currentHP-=enemy.Damage;
         enemy.currentHP-=fighter.Damage;
+        fighter.Damage+=fighter.initialDamage;
         if(fighter.currentHP <= 0)   
           fighter.isDead=true;
         if(enemy.currentHP <= 0)
@@ -184,10 +187,10 @@
       var charDarthSid = {
         name: "Darth Sidious",
         id:"darthsid",
-        initialHP: 100,
-        currentHP: 100,
-        initialDamage : 10,
-        Damage: 10,
+        initialHP: 180,
+        currentHP: 180,
+        initialDamage : 5,
+        Damage: 5,
         isFighter: true,
         isEnemy: false,
         isActive: false,
@@ -201,10 +204,10 @@
       var charDarthMaul = {
         name: "Darth Maul",
         id: "darthmaul",
-        initialHP: 110,
-        currentHP: 110,
-        initialDamage : 10,
-        Damage: 10,
+        initialHP: 140,
+        currentHP: 140,
+        initialDamage : 3,
+        Damage: 3,
         isFighter: true,
         isEnemy: false,
         isActive: false,
@@ -217,10 +220,10 @@
       var charLukeSky = {
         name: "Luke Skywalker",
         id: "lukesky",
-        initialHP: 110,
-        currentHP: 110,
-        initialDamage : 10,
-        Damage: 0,
+        initialHP: 125,
+        currentHP: 125,
+        initialDamage : 6,
+        Damage: 6,
         isFighter: true,
         isEnemy: false,
         isActive: false,
@@ -233,10 +236,10 @@
       var charObi = {
         name: "Obi Wan Kenobi",
         id: "obi",
-        initialHP: 110,
-        currentHP: 110,
-        initialDamage : 10,
-        Damage: 0,
+        initialHP: 160,
+        currentHP: 160,
+        initialDamage : 3,
+        Damage: 3,
         isFighter: true,
         isEnemy: false,
         isActive: false,
@@ -341,7 +344,7 @@
             allChars[i].isActive=false;
           if(i==fighterChosen)
             {
-              allChars[i].Damage+=20;
+              //allChars[i].Damage+=20;
               makePanel(allChars[i]);
             }
         }
